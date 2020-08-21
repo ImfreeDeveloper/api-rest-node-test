@@ -17,7 +17,7 @@ module.exports = passport => {
         const user = await User.findById(payload.userId).select('email id')
 
         if (user) {
-          done(null, user)
+          done(null, user) // если не ошибка то null
         } else {
           done(null, false)
         }
