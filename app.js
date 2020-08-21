@@ -20,6 +20,7 @@ mongoose.connect(keys.mongoURI, { useNewUrlParser: true, useUnifiedTopology: tru
     console.log('MongoDB connected.');
   })
   .catch(err => console.log(err))
+mongoose.set('useCreateIndex', true)
 
 app.use(morgan('dev'))
 app.use(cors())
