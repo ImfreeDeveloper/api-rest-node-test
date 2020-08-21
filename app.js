@@ -1,5 +1,6 @@
 const express = require('express')
 const mongoose = require('mongoose')
+const passport = require('passport')
 const bodyParser = require('body-parser')
 const cors = require('cors') // cors запросы если другой домен
 const morgan = require('morgan') // логирование
@@ -21,6 +22,9 @@ mongoose.connect(keys.mongoURI, { useNewUrlParser: true, useUnifiedTopology: tru
   })
   .catch(err => console.log(err))
 mongoose.set('useCreateIndex', true)
+// защита роутов
+app.use(passport.initialize())
+require('./middleware/passport')(passport)
 
 app.use(morgan('dev'))
 app.use(cors())
