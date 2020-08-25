@@ -1,41 +1,57 @@
 import React from 'react'
 
-import 'bulma/css/bulma.min.css'
+import './styles/main.scss'
 
 function App() {
   return (
     <>
-      <nav class="navbar is-dark" role="navigation" aria-label="main navigation" >
-        <div class="navbar-brand">
-          <a class="navbar-item is-size-3" href="https://bulma.io">
+      <nav className="navbar is-dark" role="navigation" aria-label="main navigation">
+        <div className="navbar-brand">
+          <a className="navbar-item is-size-3" href="/#">
             Newborn
           </a>
         </div>
-        <div className='navbar-menu'>
-          <div class="navbar-end ">
-            <a class="navbar-item">Регистрация</a>
-            <a class="navbar-item">Вход</a>
+        <div className="navbar-menu">
+          <div className="navbar-end">
+            <a href="/#" className="navbar-item">Регистрация</a>
+            <a href="/#" className="navbar-item">Вход</a>
           </div>
         </div>
       </nav>
-        {/* <div className="auth-block">
-        <div className="card">
-          <div className="card-content">
-            <span className="card-title">Войти в систему</span>
-            <div className="input-field">
-              <input id="email" type="email" required />
-              <label for="email">Email:</label>
-            </div>
-              <div className="input-field">
-                <input id="password" type="password" required />
-                <label for="password">Пароль:</label>
-            </div>
+      <div className="container">
+        <div className="columns">
+          <div className="column is-4 is-offset-4">
+            <div className="auth-block">
+              <div className="card">
+                <div className="card-content">
+                  <p className="mb-5 pb-2 is-size-3 has-text-weight-light">Войти в систему</p>
+                  <div className="field">
+                    <p className="control">
+                      <input className="input" type="email" placeholder="Email" />
+                    </p>
+                  </div>
+                  <div className="field">
+                    <p className="control">
+                      <input className="input" type="password" placeholder="Password" />
+                    </p>
+                  </div>
+                </div>
+                <footer className="card-footer">
+                  <div className='card-content'>
+                    <div className="field">
+                      <p className="control">
+                        <button className="button is-primary">
+                          Войти
+                        </button>
+                      </p>
+                    </div>
+                  </div>
+                </footer>
               </div>
-              <div className="card-action">
-                <button className="btn waves-light waves-effect">Войти</button>
-              </div>
             </div>
-          </div> */}
+          </div>
+        </div>
+      </div>
     </>
   )
 }
