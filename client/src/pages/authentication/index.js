@@ -1,7 +1,6 @@
-import React from 'react';
+import React from 'react'
 
-import { Formik } from 'formik'
-import * as yup from 'yup'
+import { Form, Field } from 'react-final-form'
 
 const Authentication = props => {
   const isLogin = props.match.path === '/login'
@@ -9,138 +8,128 @@ const Authentication = props => {
   const pageTitle = isLogin ? 'Войти в систему' : 'Создать аккаунт'
   const btnText = isLogin ? 'Войти' : 'Создать'
   // const apiUrl = isLogin ? '/users/login' : '/users'
-  // Валидация
-  const validationSchema = yup.object().shape({
-    name: yup.string().typeError('Должно быть строкой').required('Обязательно'),
-    email: yup.string().email('Неверный email').required('Обязательно'),
-    password: yup.string().typeError('Должно быть строкой').required('Обязательно'),
-    confirmPassword: yup.string().oneOf([yup.ref('password')], 'Пароли не совпадают').required('Обязательно'),
-    acceptTerms: yup.bool().oneOf([true], 'Вы должны принять согласие чё ептэ').required('Обязательно')
-  })
   return (
     <div className="auth-page">
       <div className="container">
         <div className="columns">
           <div className="column is-4 is-offset-4">
             <div className="card">
-              <Formik
-                initialValues={{
-                  name: '',
-                  email: '',
-                  password: '',
-                  confirmPassword: '',
-                  acceptTerms: ''
-                }}
-                validateOnBlur
-                validationSchema={validationSchema}
+              <Form
                 onSubmit={values => {
                   console.log(values)
                 }}
+                validate={values => {
+                  const errors = {}
+                  if (!values.username) {
+                    errors.username = 'Заполни username блэээээт'
+                  }
+                  if (!values.email) {
+                    errors.email = 'Заполни email блэээээт';
+                    //eslint-disable-next-line
+                  } else if (!values.email.match(/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/)) {
+                    errors.email = "Нормально делай email да"
+                  }
+                  if (!values.password) {
+                    errors.password = 'Заполни password блэээээт'
+                  }
+                  if (!values.confirmPassword) {
+                    errors.confirmPassword = 'Заполни confirmPassword блэээээт'
+                  } else if (values.confirmPassword !== values.password) {
+                    errors.confirmPassword = 'Не совпадалово'
+                  }
+                  if (!values.acceptTerms) {
+                    errors.acceptTerms = 'Соглайшайся епрст'
+                  }
+                  return errors
+                }}
               >
-                {({ values, errors, touched, handleChange, handleBlur, isValid, handleSubmit, dirty }) => (
+                {({ handleSubmit, submitting }) => (
                   <>
                     <div className="card-content">
                       <p className="mb-5 pb-2 is-size-3 has-text-weight-light">{pageTitle}</p>
-                      <div className="field">
-                        <p className="control">
-                          <input
-                            className={`input${(errors.name && touched.name ? ' is-danger' : '')}`}
-                            type="text"
-                            name="name"
-                            placeholder="Имя"
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            value={values.name}
-                          />
-                          {
-                            touched.name &&
-                            errors.name &&
-                            <span className="help is-danger">{errors.name}</span>
-                          }
-                        </p>
-                      </div>
-                      <div className="field">
-                        <p className="control">
-                          <input
-                            className={`input${(errors.email && touched.email ? ' is-danger' : '')}`}
-                            type="email"
-                            name="email"
-                            placeholder="Email"
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            value={values.email}
-                          />
-                          {
-                            touched.email &&
-                            errors.email &&
-                            <span className="help is-danger">{errors.email}</span>
-                          }
-                        </p>
-                      </div>
-                      <div className="field">
-                        <p className="control">
-                          <input
-                            className={`input${(errors.password && touched.password ? ' is-danger' : '')}`}
-                            type="password"
-                            placeholder="Пароль"
-                            name="password"
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            value={values.password}
-                          />
-                          {
-                            touched.password &&
-                            errors.password &&
-                            <span className="help is-danger">{errors.password}</span>
-                          }
-                        </p>
-                      </div>
-                      <div className="field">
-                        <p className="control">
-                          <input
-                            className={`input${(errors.confirmPassword && touched.confirmPassword ? ' is-danger' : '')}`}
-                            type="password"
-                            name="confirmPassword"
-                            placeholder="Подтверждение пароля"
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            value={values.confirmPassword}
-                          />
-                          {
-                            touched.confirmPassword &&
-                            errors.confirmPassword &&
-                            <span className="help is-danger">{errors.confirmPassword}</span>
-                          }
-                        </p>
-                      </div>
-                      <div className="field">
-                        <div className="control">
-                          <label className="checkbox">
-                            <input 
-                              type="checkbox"
-                              name="acceptTerms"
-                              className={(errors.acceptTerms && touched.acceptTerms ? ' is-danger' : '')}
-                              value={values.acceptTerms}
-                              onChange={handleChange}
-                              onBlur={handleBlur}
-                            />
-                            &nbsp;Согласен чё
-                          </label>
-                          {
-                            touched.acceptTerms &&
-                            errors.acceptTerms &&
-                            <span className="help is-danger">{errors.acceptTerms}</span>
-                          }
-                        </div>
-                      </div>
+                      <Field name="username">
+                        {({ input, meta }) => (
+                          <div className="field">
+                            <p className="control">
+                              <input
+                                {...input}
+                                type="text"
+                                className={`input${(meta.error && meta.touched ? ' is-danger' : '')}`}
+                                placeholder="Имя"
+                              />
+                              {meta.error && meta.touched && <span className="help is-danger">{meta.error}</span>}
+                            </p>
+                          </div>
+                        )}
+                      </Field>
+                      <Field name="email">
+                        {({ input, meta }) => (
+                          <div className="field">
+                            <p className="control">
+                              <input
+                                {...input}
+                                type="email"
+                                className={`input${(meta.error && meta.touched ? ' is-danger' : '')}`}
+                                placeholder="Email"
+                              />
+                              {meta.error && meta.touched && <span className="help is-danger">{meta.error}</span>}
+                            </p>
+                          </div>
+                        )}
+                      </Field>
+                      <Field name="password">
+                        {({ input, meta }) => (
+                          <div className="field">
+                            <p className="control">
+                              <input
+                                {...input}
+                                type="password"
+                                className={`input${(meta.error && meta.touched ? ' is-danger' : '')}`}
+                                placeholder="Пароль"
+                              />
+                              {meta.error && meta.touched && <span className="help is-danger">{meta.error}</span>}
+                            </p>
+                          </div>
+                        )}
+                      </Field>
+                      <Field name="confirmPassword">
+                        {({ input, meta }) => (
+                          <div className="field">
+                            <p className="control">
+                              <input
+                                {...input}
+                                type="password"
+                                className={`input${(meta.error && meta.touched ? ' is-danger' : '')}`}
+                                placeholder="Подтверждение пароля"
+                              />
+                              {meta.error && meta.touched && <span className="help is-danger">{meta.error}</span>}
+                            </p>
+                          </div>
+                        )}
+                      </Field>
+                      <Field name="acceptTerms" type="checkbox">
+                        {({ input, meta }) => (
+                          <div className="field">
+                            <p className="control">
+                              <label className="checkbox">
+                                <input
+                                  {...input}
+                                  className={meta.error && meta.touched ? 'is-danger' : ''}
+                                />&nbsp;Согласен чё
+                              </label>
+                              {meta.error && meta.touched && <span className="help is-danger">{meta.error}</span>}
+                            </p>
+                          </div>
+                        )}
+                      </Field>
                     </div>
                     <footer className="card-footer">
                       <div className='card-content'>
                         <div className="field">
                           <p className="control">
-                            <button 
+                            <button
                               className="button is-primary"
-                              disabled={!isValid && !dirty}
+                              disabled={submitting}
                               onClick={handleSubmit}
                             >
                               {btnText}
@@ -151,7 +140,7 @@ const Authentication = props => {
                     </footer>
                   </>
                 )}
-              </Formik>
+              </Form>
             </div>
           </div>
         </div>
