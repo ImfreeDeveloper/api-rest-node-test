@@ -14,7 +14,8 @@ const Authentication = props => {
     name: yup.string().typeError('Должно быть строкой').required('Обязательно'),
     email: yup.string().email('Неверный email').required('Обязательно'),
     password: yup.string().typeError('Должно быть строкой').required('Обязательно'),
-    confirmPassword: yup.string().oneOf([yup.ref('password')], 'Пароли не совпадают').required('Обязательно')
+    confirmPassword: yup.string().oneOf([yup.ref('password')], 'Пароли не совпадают').required('Обязательно'),
+    acceptTerms: yup.bool().oneOf([true], 'Вы должны принять согласие чё ептэ').required('Обязательно')
   })
   return (
     <div className="auth-page">
@@ -27,7 +28,8 @@ const Authentication = props => {
                   name: '',
                   email: '',
                   password: '',
-                  confirmPassword: ''
+                  confirmPassword: '',
+                  acceptTerms: ''
                 }}
                 validateOnBlur
                 validationSchema={validationSchema}
@@ -42,7 +44,7 @@ const Authentication = props => {
                       <div className="field">
                         <p className="control">
                           <input
-                            className="input"
+                            className={`input${(errors.name && touched.name ? ' is-danger' : '')}`}
                             type="text"
                             name="name"
                             placeholder="Имя"
@@ -60,7 +62,7 @@ const Authentication = props => {
                       <div className="field">
                         <p className="control">
                           <input
-                            className="input"
+                            className={`input${(errors.email && touched.email ? ' is-danger' : '')}`}
                             type="email"
                             name="email"
                             placeholder="Email"
@@ -78,7 +80,7 @@ const Authentication = props => {
                       <div className="field">
                         <p className="control">
                           <input
-                            className="input"
+                            className={`input${(errors.password && touched.password ? ' is-danger' : '')}`}
                             type="password"
                             placeholder="Пароль"
                             name="password"
@@ -96,7 +98,7 @@ const Authentication = props => {
                       <div className="field">
                         <p className="control">
                           <input
-                            className="input"
+                            className={`input${(errors.confirmPassword && touched.confirmPassword ? ' is-danger' : '')}`}
                             type="password"
                             name="confirmPassword"
                             placeholder="Подтверждение пароля"
@@ -110,6 +112,26 @@ const Authentication = props => {
                             <span className="help is-danger">{errors.confirmPassword}</span>
                           }
                         </p>
+                      </div>
+                      <div className="field">
+                        <div className="control">
+                          <label className="checkbox">
+                            <input 
+                              type="checkbox"
+                              name="acceptTerms"
+                              className={(errors.acceptTerms && touched.acceptTerms ? ' is-danger' : '')}
+                              value={values.acceptTerms}
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                            />
+                            &nbsp;Согласен чё
+                          </label>
+                          {
+                            touched.acceptTerms &&
+                            errors.acceptTerms &&
+                            <span className="help is-danger">{errors.acceptTerms}</span>
+                          }
+                        </div>
                       </div>
                     </div>
                     <footer className="card-footer">
